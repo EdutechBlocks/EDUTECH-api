@@ -313,8 +313,14 @@ String EdutechAPI::devicePayloadValue(const String& field, const String& publicK
         return "";
     }
 
-    DynamicJsonDocument doc(2048);
-    DeserializationError error = deserializeJson(doc, response.payload);
+    StaticJsonDocument<128> filter;
+    filter["payload"]["ip"] = true;
+    filter["payload"]["local_ip"] = true;
+    filter["payload"]["latitude"] = true;
+    filter["payload"]["longitude"] = true;
+
+    DynamicJsonDocument doc(512);
+    DeserializationError error = deserializeJson(doc, response.payload, DeserializationOption::Filter(filter));
     if (error != DeserializationError::Ok) {
         debugLine("[EdutechAPI] Erro JSON: " + String(error.c_str()));
         return "";
