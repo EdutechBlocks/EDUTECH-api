@@ -6,21 +6,24 @@
 EdutechAPI::EdutechAPI()
     : _protocol(),
       _host(),
-      _timeoutMs(5000) {
+      _timeoutMs(5000),
+      _debug(nullptr) {
     useHomolog();
 }
 
 EdutechAPI::EdutechAPI(EdutechApiEnvironment environment)
     : _protocol(),
       _host(),
-      _timeoutMs(5000) {
+      _timeoutMs(5000),
+      _debug(nullptr) {
     useEnvironment(environment);
 }
 
 EdutechAPI::EdutechAPI(const String& protocol, const String& host)
     : _protocol(protocol),
       _host(host),
-      _timeoutMs(5000) {
+      _timeoutMs(5000),
+      _debug(nullptr) {
 }
 
 void EdutechAPI::useEnvironment(EdutechApiEnvironment environment) {
@@ -82,6 +85,14 @@ void EdutechAPI::setTimeout(uint16_t timeoutMs) {
     _timeoutMs = timeoutMs;
 }
 
+void EdutechAPI::setDebug(Stream& debugPort) {
+    _debug = &debugPort;
+}
+
+void EdutechAPI::clearDebug() {
+    _debug = nullptr;
+}
+
 String EdutechAPI::baseUrl() const {
     String normalizedHost = _host;
     normalizedHost.trim();
@@ -120,7 +131,9 @@ String EdutechAPI::route(const String& pattern, const String& publicKey, const S
 
 EdutechApiResponse EdutechAPI::request(const String& method, const String& routeValue, const String& body, bool useDeviceSecret) {
     HTTPClient http;
-    http.begin(url(routeValue));
+    const String requestUrl = url(routeValue);
+    debugLine("[EdutechAPI] " + method + " " + requestUrl);
+    http.begin(requestUrl);
     http.setTimeout(_timeoutMs);
     http.addHeader("Content-Type", "application/json");
 
@@ -154,6 +167,13 @@ EdutechApiResponse EdutechAPI::request(const String& method, const String& route
         payload = http.getString();
     }
     http.end();
+
+    debugLine("[EdutechAPI] HTTP code: " + String(httpCode));
+    if (payload.length() > 0) {
+        debugLine("[EdutechAPI] Payload: " + payload);
+    } else {
+        debugLine("[EdutechAPI] Payload vazio");
+    }
 
     return parseResponse(httpCode, payload);
 }
@@ -284,20 +304,30 @@ String EdutechAPI::replaceToken(String value, const String& token, const String&
 String EdutechAPI::devicePayloadValue(const String& field, const String& publicKey) {
     EdutechApiResponse response = showDevice(publicKey);
     if (!response.success) {
+        debugLine("[EdutechAPI] Falha ao obter dispositivo: " + String(response.httpCode) + " " + response.message);
         return "";
     }
 
     DynamicJsonDocument doc(2048);
-    if (deserializeJson(doc, response.payload) != DeserializationError::Ok) {
+    DeserializationError error = deserializeJson(doc, response.payload);
+    if (error != DeserializationError::Ok) {
+        debugLine("[EdutechAPI] Erro JSON: " + String(error.c_str()));
         return "";
     }
 
     JsonVariant value = doc["payload"][field.c_str()];
     if (value.isNull()) {
+        debugLine("[EdutechAPI] Campo ausente ou nulo: " + field);
         return "";
     }
 
     return value.as<String>();
+}
+
+void EdutechAPI::debugLine(const String& message) const {
+    if (_debug) {
+        _debug->println(message);
+    }
 }
 
 EdutechApiResponse EdutechAPI::parseResponse(int httpCode, const String& payload) const {

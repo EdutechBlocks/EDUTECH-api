@@ -2,6 +2,7 @@
 #define EDUTECH_API_H
 
 #include <Arduino.h>
+#include <Stream.h>
 
 struct EdutechApiResponse {
     int httpCode = 0;
@@ -46,6 +47,8 @@ public:
     void setDeviceKeys(const String& publicKey, const String& secretKey);
     void setBearerToken(const String& token);
     void setTimeout(uint16_t timeoutMs);
+    void setDebug(Stream& debugPort);
+    void clearDebug();
 
     String baseUrl() const;
     String url(const String& routeValue) const;
@@ -88,10 +91,12 @@ private:
     String _secretKey;
     String _bearerToken;
     uint16_t _timeoutMs;
+    Stream* _debug;
 
     String activePublicKey(const String& publicKey) const;
     String replaceToken(String value, const String& token, const String& replacement) const;
     String devicePayloadValue(const String& field, const String& publicKey = String());
+    void debugLine(const String& message) const;
     EdutechApiResponse parseResponse(int httpCode, const String& payload) const;
 };
 
