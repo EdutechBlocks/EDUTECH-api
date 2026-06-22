@@ -262,7 +262,7 @@ String EdutechAPI::getDeviceLongitude(const String& publicKey) {
 
 String EdutechAPI::getDeviceIp(const String& publicKey) {
     String localIp = devicePayloadValue("local_ip", publicKey);
-    if (localIp.length() > 0) {
+    if (localIp.length() > 0 && localIp != "null") {
         return localIp;
     }
 
