@@ -77,6 +77,7 @@ public:
     String getDeviceLatitude(const String& publicKey = String());
     String getDeviceLongitude(const String& publicKey = String());
     String getDeviceIp(const String& publicKey = String());
+    EdutechApiResponse lastResponse() const;
 
     EdutechApiResponse listResources(const String& publicKey = String());
     EdutechApiResponse createResource(const String& jsonBody, const String& publicKey = String());
@@ -92,6 +93,7 @@ private:
     String _bearerToken;
     uint16_t _timeoutMs;
     Stream* _debug;
+    EdutechApiResponse _lastResponse;
 
     String activePublicKey(const String& publicKey) const;
     String replaceToken(String value, const String& token, const String& replacement) const;

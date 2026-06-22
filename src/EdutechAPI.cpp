@@ -175,7 +175,8 @@ EdutechApiResponse EdutechAPI::request(const String& method, const String& route
         debugLine("[EdutechAPI] Payload vazio");
     }
 
-    return parseResponse(httpCode, payload);
+    _lastResponse = parseResponse(httpCode, payload);
+    return _lastResponse;
 }
 
 EdutechApiResponse EdutechAPI::get(const String& routeValue, bool useDeviceSecret) {
@@ -266,6 +267,10 @@ String EdutechAPI::getDeviceIp(const String& publicKey) {
     }
 
     return devicePayloadValue("ip", publicKey);
+}
+
+EdutechApiResponse EdutechAPI::lastResponse() const {
+    return _lastResponse;
 }
 
 EdutechApiResponse EdutechAPI::listResources(const String& publicKey) {
