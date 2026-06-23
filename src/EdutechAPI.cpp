@@ -241,15 +241,15 @@ EdutechApiResponse EdutechAPI::createDevice(const String& jsonBody) {
 }
 
 EdutechApiResponse EdutechAPI::showDevice(const String& publicKey) {
-    return get(route(EdutechRoutes::Api::DEVICE, publicKey), true);
+    return get(route(EdutechRoutes::Api::DEVICE_ALIAS, publicKey), true);
 }
 
 EdutechApiResponse EdutechAPI::updateDevice(const String& jsonBody, const String& publicKey) {
-    return patch(route(EdutechRoutes::Api::DEVICE, publicKey), jsonBody, true);
+    return patch(route(EdutechRoutes::Api::DEVICE_ALIAS, publicKey), jsonBody, true);
 }
 
 EdutechApiResponse EdutechAPI::deleteDevice(const String& publicKey) {
-    return del(route(EdutechRoutes::Api::DEVICE, publicKey), true);
+    return del(route(EdutechRoutes::Api::DEVICE_ALIAS, publicKey), true);
 }
 
 String EdutechAPI::getDeviceLatitude(const String& publicKey) {
@@ -274,31 +274,31 @@ EdutechApiResponse EdutechAPI::lastResponse() const {
 }
 
 EdutechApiResponse EdutechAPI::listResources(const String& publicKey) {
-    return get(route(EdutechRoutes::Api::DEVICE_RESOURCES, publicKey), true);
+    return get(route(EdutechRoutes::Api::DEVICE_ALIAS_RESOURCES, publicKey), true);
 }
 
 EdutechApiResponse EdutechAPI::createResource(const String& jsonBody, const String& publicKey) {
-    return post(route(EdutechRoutes::Api::DEVICE_RESOURCES, publicKey), jsonBody, true);
+    return post(route(EdutechRoutes::Api::DEVICE_ALIAS_RESOURCES, publicKey), jsonBody, true);
 }
 
 EdutechApiResponse EdutechAPI::showResource(const String& resource, const String& publicKey) {
-    return get(route(EdutechRoutes::Api::DEVICE_RESOURCE, publicKey, resource), true);
+    return get(route(EdutechRoutes::Api::DEVICE_ALIAS_RESOURCE, publicKey, resource), true);
 }
 
 EdutechApiResponse EdutechAPI::updateResource(const String& resource, const String& jsonBody, const String& publicKey) {
-    return patch(route(EdutechRoutes::Api::DEVICE_RESOURCE, publicKey, resource), jsonBody, true);
+    return patch(route(EdutechRoutes::Api::DEVICE_ALIAS_RESOURCE, publicKey, resource), jsonBody, true);
 }
 
 EdutechApiResponse EdutechAPI::deleteResource(const String& resource, const String& publicKey) {
-    return del(route(EdutechRoutes::Api::DEVICE_RESOURCE, publicKey, resource), true);
+    return del(route(EdutechRoutes::Api::DEVICE_ALIAS_RESOURCE, publicKey, resource), true);
 }
 
 EdutechApiResponse EdutechAPI::lastResourceFeed(const String& resource, const String& publicKey) {
-    return get(route(EdutechRoutes::Api::DEVICE_RESOURCE_LAST_FEED, publicKey, resource), true);
+    return get(route(EdutechRoutes::Api::DEVICE_ALIAS_RESOURCE_LAST_FEED, publicKey, resource), true);
 }
 
 EdutechApiResponse EdutechAPI::createResourceFeed(const String& resource, const String& jsonBody, const String& publicKey) {
-    return post(route(EdutechRoutes::Api::DEVICE_RESOURCE_FEEDS, publicKey, resource), jsonBody, true);
+    return post(route(EdutechRoutes::Api::DEVICE_ALIAS_RESOURCE_FEEDS, publicKey, resource), jsonBody, true);
 }
 
 EdutechApiResponse EdutechAPI::createResourceFeed(const String& resource, float value, const String& publicKey) {
