@@ -293,6 +293,24 @@ EdutechApiResponse EdutechAPI::deleteResource(const String& resource, const Stri
     return del(route(EdutechRoutes::Api::DEVICE_RESOURCE, publicKey, resource), true);
 }
 
+EdutechApiResponse EdutechAPI::lastResourceFeed(const String& resource, const String& publicKey) {
+    return get(route(EdutechRoutes::Api::DEVICE_RESOURCE_LAST_FEED, publicKey, resource), true);
+}
+
+EdutechApiResponse EdutechAPI::createResourceFeed(const String& resource, const String& jsonBody, const String& publicKey) {
+    return post(route(EdutechRoutes::Api::DEVICE_RESOURCE_FEEDS, publicKey, resource), jsonBody, true);
+}
+
+EdutechApiResponse EdutechAPI::createResourceFeed(const String& resource, float value, const String& publicKey) {
+    DynamicJsonDocument doc(128);
+    doc["input"] = value;
+
+    String body;
+    serializeJson(doc, body);
+
+    return createResourceFeed(resource, body, publicKey);
+}
+
 String EdutechAPI::activePublicKey(const String& publicKey) const {
     if (publicKey.length() > 0) {
         return publicKey;

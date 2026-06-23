@@ -27,9 +27,13 @@ namespace Api {
     static constexpr const char* DEVICE = "/api/devices/{publicKey}";
     static constexpr const char* DEVICE_RESOURCES = "/api/devices/{publicKey}/resources";
     static constexpr const char* DEVICE_RESOURCE = "/api/devices/{publicKey}/resources/{resource}";
+    static constexpr const char* DEVICE_RESOURCE_FEEDS = "/api/devices/{publicKey}/resources/{resource}/feeds";
+    static constexpr const char* DEVICE_RESOURCE_LAST_FEED = "/api/devices/{publicKey}/resources/{resource}/feeds/last";
     static constexpr const char* DEVICE_ALIAS = "/api/device/{publicKey}";
     static constexpr const char* DEVICE_ALIAS_RESOURCES = "/api/device/{publicKey}/resources";
     static constexpr const char* DEVICE_ALIAS_RESOURCE = "/api/device/{publicKey}/resources/{resource}";
+    static constexpr const char* DEVICE_ALIAS_RESOURCE_FEEDS = "/api/device/{publicKey}/resources/{resource}/feeds";
+    static constexpr const char* DEVICE_ALIAS_RESOURCE_LAST_FEED = "/api/device/{publicKey}/resources/{resource}/feeds/last";
 }
 }
 
@@ -84,6 +88,9 @@ public:
     EdutechApiResponse showResource(const String& resource, const String& publicKey = String());
     EdutechApiResponse updateResource(const String& resource, const String& jsonBody, const String& publicKey = String());
     EdutechApiResponse deleteResource(const String& resource, const String& publicKey = String());
+    EdutechApiResponse lastResourceFeed(const String& resource, const String& publicKey = String());
+    EdutechApiResponse createResourceFeed(const String& resource, const String& jsonBody, const String& publicKey = String());
+    EdutechApiResponse createResourceFeed(const String& resource, float value, const String& publicKey = String());
 
 private:
     String _protocol;
